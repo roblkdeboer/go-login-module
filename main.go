@@ -14,6 +14,7 @@ func main() {
 
     r.HandleFunc("/", handlers.HomeHandler)
     r.HandleFunc("/about", handlers.AboutHandler)
+	r.HandleFunc("/sign-up", handlers.CreateUserHandler).Methods("POST")
 
     log.Fatal(http.ListenAndServe("localhost:8080", r))
 }
