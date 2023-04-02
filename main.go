@@ -7,10 +7,14 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/roblkdeboer/login-module/handlers"
+	"github.com/roblkdeboer/login-module/middleware"
 )
 
 func main() {
     r := mux.NewRouter()
+
+	// add the middleware
+	r.Use(middleware.RecoverMiddleware)
 
     r.HandleFunc("/", handlers.HomeHandler)
     r.HandleFunc("/about", handlers.AboutHandler)
