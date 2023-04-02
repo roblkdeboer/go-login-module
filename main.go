@@ -1,22 +1,19 @@
 package main
 
 import (
-	"fmt"
-	"html"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
+
+	"github.com/roblkdeboer/login-module/handlers"
 )
 
 func main() {
+    r := mux.NewRouter()
 
-	router := mux.NewRouter()
+    r.HandleFunc("/", handlers.HomeHandler)
+    r.HandleFunc("/about", handlers.AboutHandler)
 
-    router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
-    })
-
-    log.Fatal(http.ListenAndServe("localhost:8081", router))
-
+    log.Fatal(http.ListenAndServe("localhost:8080", r))
 }
