@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/roblkdeboer/login-module/errors"
 	"github.com/roblkdeboer/login-module/models"
 )
 
@@ -11,7 +12,7 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
     var user models.User
     err := json.NewDecoder(r.Body).Decode(&user)
     if err != nil {
-        http.Error(w, err.Error(), http.StatusBadRequest)
+        http.Error(w, errors.BadRequestError{Message: "Invalid request body"}.Error(), http.StatusBadRequest)
         return
     }
 
