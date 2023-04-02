@@ -3,16 +3,12 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+
+	"github.com/roblkdeboer/login-module/models"
 )
 
-type User struct {
-    Name     string `json:"name"`
-    Email    string `json:"email"`
-    Password string `json:"password"`
-}
-
 func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
-    var user User
+    var user models.User
     err := json.NewDecoder(r.Body).Decode(&user)
     if err != nil {
         http.Error(w, err.Error(), http.StatusBadRequest)
