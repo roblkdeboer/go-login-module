@@ -38,12 +38,12 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    _, err = h.DB.Exec("INSERT INTO users (name, email, password) VALUES ($1, $2, $3)", user.Name, user.Email, user.Password)
-	if err != nil {
-		dbErr := &errors.DatabaseError{Message: err.Error()}
-		http.Error(w, dbErr.Error(), http.StatusInternalServerError)
-		return
-	}
+    err = utils.InsertUser(h.DB, user)
+    if err != nil {
+        dbErr := &errors.DatabaseError{Message: err.Error()}
+        http.Error(w, dbErr.Error(), http.StatusInternalServerError)
+        return
+    }
     
     // return a JSON response indicating success
     w.Header().Set("Content-Type", "application/json")
