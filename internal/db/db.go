@@ -3,31 +3,32 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"os"
 )
 
-const (
-    host     = "localhost"
-    port     = 5455
-    user     = "postgresUser"
-    password = "postgresPW"
-    dbname   = "postgresDB"
-)
-
-func Connect() (*sql.DB, error) {
-	// connection string
-	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-         
-	// open database
-    db, err := sql.Open("postgres", psqlconn)
-	
+func ConnectDB(host string, port int, user, password, dbname string) (*sql.DB, error) {
+	connString := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+	db, err := sql.Open("postgres", connString)
 	if err != nil {
-		return nil, fmt.Errorf("failed to connect to database: %v", err)
+		return nil, err
 	}
-
 	err = db.Ping()
 	if err != nil {
-		return nil, fmt.Errorf("failed to ping database: %v", err)
+		return nil, err
 	}
 
 	return db, nil
 }
+
+// CreateSchema creates the necessary tables in the database
+func CreateSchema(db *sql.DB) error {
+	sqlFile, err := os.ReadFile("db/schema.sql")
+	if err != nil {
+	  return err
+	}
+	_, err = db.Exec(string(sqlFile))
+	if err != nil {
+	  return err
+	}
+	return nil
+  }

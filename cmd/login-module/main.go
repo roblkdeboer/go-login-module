@@ -6,19 +6,23 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"github.com/roblkdeboer/login-module/internal/db"
 	"github.com/roblkdeboer/login-module/internal/handlers"
-	"github.com/roblkdeboer/login-module/internal/middleware"
+
+	_ "github.com/lib/pq"
 )
 
 func main() {
-    r := mux.NewRouter()
 
-	// add the middleware
-	r.Use(middleware.RecoverMiddleware)
+	db, err := db.ConnectDB("localhost", 5455,"postgresUser", "postgresPW", "postgresDB")
+	if err != nil {
+		log.Fatal(err)
+	}
 
-    r.HandleFunc("/", handlers.HomeHandler)
-    r.HandleFunc("/about", handlers.AboutHandler)
-	r.HandleFunc("/sign-up", handlers.CreateUserHandler).Methods("POST")
+	userHandler := handlers.NewUserHandler(db)
 
-    log.Fatal(http.ListenAndServe("localhost:8080", r))
+	router := mux.NewRouter()
+	userHandler.RegisterRoutes(router)
+
+	log.Fatal(http.ListenAndServe("localhost:8080", router))
 }
