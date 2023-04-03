@@ -9,20 +9,12 @@ import (
 
 	"github.com/roblkdeboer/login-module/internal/errors"
 	"github.com/roblkdeboer/login-module/internal/models"
+	"github.com/roblkdeboer/login-module/internal/utils"
 )
 
 type UserHandler struct {
 	DB *sql.DB
 } 
-
-func userExists(db *sql.DB, email string) (bool, error) {
-    var exists bool
-    err := db.QueryRow("SELECT EXISTS (SELECT 1 FROM users WHERE email=$1)", email).Scan(&exists)
-    if err != nil {
-        return false, err
-    }
-    return exists, nil
-}
 
 func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	// Use h.DB to interact with the database
@@ -34,7 +26,7 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
     }
 
     // Check if the user already exists
-    exists, err := userExists(h.DB, user.Email)
+    exists, err := utils.UserExists(h.DB, user.Email)
     if err != nil {
         dbErr := &errors.DatabaseError{Message: err.Error()}
 		http.Error(w, dbErr.Error(), http.StatusInternalServerError)
