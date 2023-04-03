@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/roblkdeboer/login-module/errors"
-	"github.com/roblkdeboer/login-module/models"
+	"github.com/roblkdeboer/login-module/internal/errors"
+	"github.com/roblkdeboer/login-module/internal/models"
 )
 
 func CreateUserHandler(w http.ResponseWriter, r *http.Request) {

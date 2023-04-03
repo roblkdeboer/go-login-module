@@ -6,8 +6,8 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/roblkdeboer/login-module/handlers"
-	"github.com/roblkdeboer/login-module/middleware"
+	"github.com/roblkdeboer/login-module/internal/handlers"
+	"github.com/roblkdeboer/login-module/internal/middleware"
 )
 
 func main() {
