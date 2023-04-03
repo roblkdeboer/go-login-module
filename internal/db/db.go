@@ -3,8 +3,11 @@ package db
 import (
 	"database/sql"
 	"fmt"
-	"os"
 )
+
+type DB struct {
+    *sql.DB
+}
 
 func ConnectDB(host string, port int, user, password, dbname string) (*sql.DB, error) {
 	connString := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
@@ -20,15 +23,15 @@ func ConnectDB(host string, port int, user, password, dbname string) (*sql.DB, e
 	return db, nil
 }
 
-// CreateSchema creates the necessary tables in the database
-func CreateSchema(db *sql.DB) error {
-	sqlFile, err := os.ReadFile("db/schema.sql")
-	if err != nil {
-	  return err
-	}
-	_, err = db.Exec(string(sqlFile))
-	if err != nil {
-	  return err
-	}
-	return nil
-  }
+// // CreateSchema creates the necessary tables in the database
+// func CreateSchema(db *sql.DB) error {
+// 	sqlFile, err := os.ReadFile("db/schema.sql")
+// 	if err != nil {
+// 	  return err
+// 	}
+// 	_, err = db.Exec(string(sqlFile))
+// 	if err != nil {
+// 	  return err
+// 	}
+// 	return nil
+//   }
