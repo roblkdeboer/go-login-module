@@ -21,9 +21,11 @@ func main() {
 
 	// Create handlers with access to database connection
 	userHandler := handlers.NewUserHandler(db)
+	loginHandler := handlers.NewLoginHandler(db)
 
 	router := mux.NewRouter()
 	userHandler.RegisterRoutes(router)
+	loginHandler.RegisterRoutes(router)
 
 	log.Fatal(http.ListenAndServe("localhost:8080", router))
 }
