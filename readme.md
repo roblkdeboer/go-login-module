@@ -15,7 +15,6 @@ With Docker installed, run:
 To run a local instance of postgres, run but configure to your own desired credentials and DB name:
 
 ```
-
 docker run ^
     --name myPostgresDb ^
     -p 5455:5432 ^

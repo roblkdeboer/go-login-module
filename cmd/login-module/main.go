@@ -19,6 +19,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Create handlers with access to database connection
 	userHandler := handlers.NewUserHandler(db)
 
 	router := mux.NewRouter()

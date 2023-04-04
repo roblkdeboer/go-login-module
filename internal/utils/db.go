@@ -16,7 +16,7 @@ func UserExists(db *sql.DB, email string) (bool, error) {
     return exists, nil
 }
 
-func InsertUser(db *sql.DB, user models.User) error {
-	_, err := db.Exec("INSERT INTO users (name, email, password) VALUES ($1, $2, $3)", user.Name, user.Email, user.Password)
+func InsertUser(db *sql.DB, user models.User, passwordHash, passwordSalt string) error {
+	_, err := db.Exec("INSERT INTO users (name, email, password_hash, password_salt) VALUES ($1, $2, $3)", user.Name, user.Email, passwordHash, passwordSalt)
 	return err
 }

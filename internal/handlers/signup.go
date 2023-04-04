@@ -28,7 +28,7 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
     // Check if the user already exists
     exists, err := utils.UserExists(h.DB, user.Email)
     if err != nil {
-        dbErr := &errors.DatabaseError{Message: err.Error()}
+        dbErr := &errors.DatabaseError{Message: "Unable to query database"}
 		http.Error(w, dbErr.Error(), http.StatusInternalServerError)
 		return
     }
@@ -38,9 +38,17 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    err = utils.InsertUser(h.DB, user)
+    // Generate password hash and salt
+    passwordHash, err := utils.GeneratePasswordHash(user.Password)
     if err != nil {
-        dbErr := &errors.DatabaseError{Message: err.Error()}
+        dbErr := &errors.DatabaseError{Message: "Error hashing the password"}
+        http.Error(w, dbErr.Error(), http.StatusInternalServerError)
+        return
+    }
+
+    err = utils.InsertUser(h.DB, user, passwordHash.Hash, passwordHash.Salt)
+    if err != nil {
+        dbErr := &errors.DatabaseError{Message: "Cannot insert into database"}
         http.Error(w, dbErr.Error(), http.StatusInternalServerError)
         return
     }
