@@ -1,8 +1,12 @@
 # Intro
 
-# Tech Stack
+This is a module that can be used for user account management. This is a playground for me to experiment/practice building features from scratch around user account management
 
 # Functionality
+
+- Account Creation
+- Password Validation
+- Password Encryption
 
 # Running Locally
 
