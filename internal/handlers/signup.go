@@ -34,7 +34,14 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
     }
     if exists {
         w.WriteHeader(http.StatusBadRequest)
-        w.Write([]byte("User with given email already exists"))
+        w.Write([]byte("User already exists"))
+        return
+    }
+
+    // Check if the password meets the required strength
+    err = utils.IsValidPassword(user.Password)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }
 
