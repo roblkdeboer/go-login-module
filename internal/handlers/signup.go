@@ -53,7 +53,7 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    err = utils.InsertUser(h.DB, user, passwordHash.Hash, passwordHash.Salt)
+    err = utils.InsertUser(h.DB, user, passwordHash.Hash)
     if err != nil {
         dbErr := &errors.DatabaseError{Message: "Cannot insert into database"}
         http.Error(w, dbErr.Error(), http.StatusInternalServerError)

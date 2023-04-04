@@ -1,11 +1,7 @@
 package utils
 
 import (
-	"crypto/rand"
-	"crypto/sha256"
-	"encoding/hex"
-
-	"golang.org/x/crypto/pbkdf2"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // PasswordHash represents the hash and salt of a password
@@ -16,20 +12,16 @@ type PasswordHash struct {
 
 // GeneratePasswordHash generates a hash and salt for the given password
 func GeneratePasswordHash(password string) (*PasswordHash, error) {
-    salt := make([]byte, 32)
-    _, err := rand.Read(salt)
+    hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
     if err != nil {
         return nil, err
     }
 
-    hash := pbkdf2.Key([]byte(password), salt, 10000, 32, sha256.New)
-
-    return &PasswordHash{Hash: hex.EncodeToString(hash), Salt: hex.EncodeToString(salt)}, nil
+    return &PasswordHash{Hash: string(hashedPassword)}, nil
 }
 
 // VerifyPassword checks if the given password matches the hash and salt
-func VerifyPassword(password string, hash *PasswordHash) bool {
-    salt, _ := hex.DecodeString(hash.Salt)
-    computedHash := pbkdf2.Key([]byte(password), salt, 10000, 32, sha256.New)
-    return hex.EncodeToString(computedHash) == hash.Hash
+func VerifyPassword(password string, hash string) bool {
+    err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+    return err == nil
 }
