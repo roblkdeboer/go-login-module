@@ -40,15 +40,15 @@ func (h *LoginHandler) AuthenticateUser(w http.ResponseWriter, r *http.Request) 
 	}
 
 	// Create a JWT token and return it in the response
-	// tokenString, err := utils.GenerateJWTToken(dbUser.Email)
-	// if err != nil {
-	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
-	// 	return
-	// }
+	tokenString, err := utils.GenerateJWTToken(dbUser.Email)
+	if err != nil {
+		http.Error(w, errors.BadRequestError{Message: "Authentication failed"}.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	// json.NewEncoder(w).Encode(map[string]string{"token": tokenString})
+	json.NewEncoder(w).Encode(map[string]string{"token": tokenString})
 	json.NewEncoder(w).Encode(map[string]string{"message": "logged in successfully"})
 }
 
