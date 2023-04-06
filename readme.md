@@ -7,6 +7,7 @@ This is a module that can be used for user account management. This is a playgro
 - Account Creation
 - Password Validation
 - Password Encryption
+- Protected Routes
 
 # Running Locally
 
