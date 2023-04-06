@@ -8,6 +8,7 @@ import (
 
 	"github.com/roblkdeboer/login-module/internal/db"
 	"github.com/roblkdeboer/login-module/internal/handlers"
+	"github.com/roblkdeboer/login-module/internal/middleware"
 
 	_ "github.com/lib/pq"
 )
@@ -24,6 +25,12 @@ func main() {
 	loginHandler := handlers.NewLoginHandler(db)
 
 	router := mux.NewRouter()
+	router.Use(middleware.RecoverMiddleware)
+
+	// Apply auth middleware to a specific route
+	router.Path("/admin").Methods(http.MethodGet).Handler(middleware.AuthMiddleware(http.HandlerFunc(handlers.AdminHandler)))
+
+
 	userHandler.RegisterRoutes(router)
 	loginHandler.RegisterRoutes(router)
 

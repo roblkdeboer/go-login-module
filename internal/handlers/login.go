@@ -47,9 +47,13 @@ func (h *LoginHandler) AuthenticateUser(w http.ResponseWriter, r *http.Request) 
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Authorization", "Bearer "+tokenString)
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"message": "logged in successfully"})
+
+	response := map[string]string{
+		"token":   tokenString,
+		"message": "logged in successfully",
+	}
+	json.NewEncoder(w).Encode(response)
 }
 
 func NewLoginHandler(db *sql.DB) *LoginHandler {

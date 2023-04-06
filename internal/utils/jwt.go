@@ -7,7 +7,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-var jwtKey = []byte("your_secret_key_here")
+var jwtKey = []byte("my_secret_key")
 
 // Claims represents the data we want to store in the JWT
 type Claims struct {
