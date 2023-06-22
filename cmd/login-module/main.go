@@ -41,8 +41,9 @@ func main() {
 	router.Use(middleware.RecoverMiddleware)
 
 	// Apply auth middleware to a specific route
+	router.Path("/about").Methods(http.MethodGet).Handler(http.HandlerFunc(handlers.AboutHandler))
 	router.Path("/admin").Methods(http.MethodGet).Handler(middleware.AuthMiddleware(http.HandlerFunc(handlers.AdminHandler)))
-
+	router.Path("/").Methods(http.MethodGet).Handler(http.HandlerFunc(handlers.HomeHandler))
 
 	userHandler.RegisterRoutes(router)
 	loginHandler.RegisterRoutes(router)
