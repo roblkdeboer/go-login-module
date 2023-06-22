@@ -21,20 +21,20 @@ func (h *LoginHandler) AuthenticateUser(w http.ResponseWriter, r *http.Request) 
 	var user models.User
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		http.Error(w, errors.BadRequestError{Message: "Invalid request body"}.Error(), http.StatusBadRequest)
+		http.Error(w, errors.BadRequestError{Message: "invalid request body"}.Error(), http.StatusBadRequest)
 		return
 	}
 
 	// Retrieve user information from the database
 	dbUser, err := utils.GetUserByEmail(h.DB, user.Email)
 	if err != nil {
-		dbErr := &errors.DatabaseError{Message: "No email provided"}
+		dbErr := &errors.DatabaseError{Message: "no email provided"}
 		http.Error(w, dbErr.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	if !utils.VerifyPassword(user.Password, dbUser.Password) {
-		dbErr := &errors.DatabaseError{Message: "Invalid email or password"}
+		dbErr := &errors.DatabaseError{Message: "invalid email or password"}
         http.Error(w, dbErr.Error(), http.StatusInternalServerError)
         return
 	}
@@ -42,7 +42,7 @@ func (h *LoginHandler) AuthenticateUser(w http.ResponseWriter, r *http.Request) 
 	// Create a JWT token and return it in the response
 	tokenString, err := utils.GenerateJWTToken(dbUser.Email)
 	if err != nil {
-		http.Error(w, errors.BadRequestError{Message: "Authentication failed"}.Error(), http.StatusInternalServerError)
+		http.Error(w, errors.BadRequestError{Message: "authentication failed"}.Error(), http.StatusInternalServerError)
 		return
 	}
 

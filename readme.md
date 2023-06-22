@@ -31,3 +31,11 @@ docker run ^
 ```
 
 Once the instance is running, connect to it with any DB connection GUI (e.g. pgAdmin) or command line
+
+You will need to set up an .env file in the root of the project with the variables listed above to access the database
+
+## Running the project
+
+After the database is spun up navigate to the cmd/login-module directory and run
+
+`go main.go`

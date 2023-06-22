@@ -12,7 +12,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		authorizationHeader := r.Header.Get("Authorization")
 		if authorizationHeader == "" {
-			http.Error(w, "Missing authorization header", http.StatusUnauthorized)
+			http.Error(w, "missing authorization header", http.StatusUnauthorized)
 			return
 		}
 
@@ -20,7 +20,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-				return nil, errors.New("Invalid token signing method")
+				return nil, errors.New("invalid token signing method")
 			}
 
 			// Replace the following with your own secret key
@@ -33,7 +33,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		}
 
 		if !token.Valid {
-			http.Error(w, "Invalid token", http.StatusUnauthorized)
+			http.Error(w, "invalid token", http.StatusUnauthorized)
 			return
 		}
 
